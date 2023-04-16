@@ -42,7 +42,14 @@ class VkApiService
         foreach ($posts as $post) {
 
             if (isset($post->attachments[0]->photo->sizes[5]->url)) {
-                $imageUrl = ImagesService::cropRemoteImage($post->attachments[0]->photo->sizes[5]->url, 'posts', 1150, 1080);
+                $imageUrl = ImagesService::cropRemoteImage(
+                    url: $post->attachments[0]->photo->sizes[5]->url,
+                    folder: 'posts',
+                    width: 1150,
+                    height: 1080,
+                    x0: 0,
+                    y0: 0,
+                );
             }
 
             $data[] = [

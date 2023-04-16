@@ -27,14 +27,14 @@ class ImagesService
         return $result ? $path : false;
     }
 
-    public static function cropRemoteImage($url, $folder, $width, $height)
+    public static function cropRemoteImage($url, $folder, $width, $height, $x0, $y0)
     {
         $name = Str::afterLast($url, '/');
         $name = Str::before($name, '?');
         $path = $folder . '/' . $name;
 
         $img = Image::make($url);
-        $img->crop($width, $height, 0, 0);
+        $img->crop($width, $height, $x0, $y0);
         $img->save($_SERVER['DOCUMENT_ROOT'] . '/storage/' . $path);
 
         return $path;
