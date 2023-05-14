@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: vshop_nginx
+    volumes:
+      - ./:/var/www/
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    ports:
+      - 8080:80
+    depends_on:
+      - app
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: vshop
+    volumes:
+      - ./:/var/www/
+    user: 1000:1000
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0.33
+    restart: always
+    volumes:
+      - ./cache/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: vshop
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 8101:3306
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    container_name: vshop_db
