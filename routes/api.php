@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\CategoryGroupController;
+use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +19,6 @@ Route::get('/', function (Request $request) {
     return 'VShop API startpoint';
 });
 
-Route::prefix('categoryGroups')->group(function () {
-    Route::get('/list/', [CategoryGroupController::class, 'list']);
+Route::prefix('categories')->group(function () {
+    Route::get('/list/', [CategoryController::class, 'list']);
 });
