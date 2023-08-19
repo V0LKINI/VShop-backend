@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,8 @@ Route::get('/', function (Request $request) {
     return 'VShop API startpoint';
 });
 
+Route::get('/home', [HomeController::class, 'index']);
+
 Route::prefix('categories')->group(function () {
-    Route::get('/list/', [CategoryController::class, 'list']);
+    Route::get('/', [CategoryController::class, 'index']);
 });

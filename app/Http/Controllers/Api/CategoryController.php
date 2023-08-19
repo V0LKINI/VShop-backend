@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\CategoryGroup;
-use Illuminate\Http\JsonResponse;
+use App\Services\CategoryService;
 
 class CategoryController extends BaseController
 {
+    public function __construct(private readonly CategoryService $categoryService,) {}
+
     /**
-     * Список категорий
+     * Get data for home page
      */
-    public function list(): JsonResponse
+    public function index()
     {
-        $categories = CategoryGroup::query()
-            ->with(['categories' => function($query) {
-                $query->where('active', true)
-                    ->orderBy('sort')
-                    ->select('id', 'category_group_id', 'name', 'code');
-            }])
-            ->where('active', true)
-            ->orderBy('sort')
-            ->get(['id', 'name', 'code']);
-
-        return $this->success($categories);
+        try {
+            $categories = $this->categoryService->getList();
+            return $this->success($categories);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
     }
-
 }
