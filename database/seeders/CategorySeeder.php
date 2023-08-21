@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->insert([
+        DB::table('categories')->insertOrIgnore([
             ['category_group_id' => 1, 'name' => 'Футболки', 'code' => 't_shirts', 'active' => true, 'sort' => 10],
             ['category_group_id' => 1, 'name' => 'Шорты', 'code' => 'shorts', 'active' => true, 'sort' => 20],
             ['category_group_id' => 1, 'name' => 'Кофты', 'code' => 'sweatshirts', 'active' => true, 'sort' => 30],

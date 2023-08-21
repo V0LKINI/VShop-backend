@@ -23,10 +23,18 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('entity');
+            $table->string('image');
+            $table->integer('sort')->nullable()->default(500);
+            $table->timestamps();
+        });
+
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
             $table->timestamps();
@@ -43,7 +51,7 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
             $table->timestamps();
@@ -63,7 +71,7 @@ return new class extends Migration
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('active');
@@ -74,7 +82,7 @@ return new class extends Migration
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
             $table->timestamps();
@@ -83,7 +91,7 @@ return new class extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
@@ -93,7 +101,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
@@ -103,7 +111,7 @@ return new class extends Migration
         Schema::create('order_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
@@ -113,7 +121,7 @@ return new class extends Migration
         Schema::create('category_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
@@ -124,7 +132,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_group_id')->nullOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('active');
@@ -137,39 +145,9 @@ return new class extends Migration
             $table->foreignId('category_id')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('brand_id')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->nullOnDelete()->cascadeOnUpdate();
-            $table->string('name');
-            $table->text('description');
             $table->boolean('active');
             $table->unsignedSmallInteger('sort')->default(500);
             $table->softDeletes();
-            $table->timestamps();
-        });
-
-        Schema::create('product_properties', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('code');
-            $table->text('description')->nullable();
-            $table->string('type')->dafault('S');
-            $table->boolean('multiple')->dafault(false);
-            $table->boolean('active');
-            $table->unsignedSmallInteger('sort')->default(500);
-            $table->timestamps();
-        });
-
-        Schema::create('product_property_lists', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_property_id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('name');
-            $table->timestamps();
-        });
-
-        Schema::create('product_property_values', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('product_property_id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('product_property_list_id')->nullable();
-            $table->string('value')->nullable();
             $table->timestamps();
         });
 
@@ -178,6 +156,7 @@ return new class extends Migration
             $table->foreignId('product_id');
             $table->string('article')->nullable();
             $table->unsignedMediumInteger('stock')->default(0);
+            $table->unsignedSmallInteger('sort')->default(500);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -185,7 +164,7 @@ return new class extends Migration
         Schema::create('offer_properties', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->string('type')->dafault('S');
             $table->boolean('multiple')->dafault(false);
@@ -217,13 +196,6 @@ return new class extends Migration
             $table->decimal('price', $precision = 9, $scale = 2);
             $table->tinyInteger('discount')->default(0);
             $table->unique(['offer_id', 'currency_id']);
-            $table->timestamps();
-        });
-
-        Schema::create('offer_images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('offer_id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('image');
             $table->timestamps();
         });
 
@@ -264,12 +236,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('review_images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('review_id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('image');
-            $table->timestamps();
-        });
     }
 
     /**
@@ -277,12 +243,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('review_images');
         Schema::dropIfExists('reviews');
         Schema::dropIfExists('order_product');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('offer_offer_property_value');
-        Schema::dropIfExists('offer_images');
         Schema::dropIfExists('offer_prices');
         Schema::dropIfExists('offer_property_values');
         Schema::dropIfExists('offer_property_lists');

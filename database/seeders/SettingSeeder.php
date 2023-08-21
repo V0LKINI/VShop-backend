@@ -15,7 +15,7 @@ class SettingSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('settings')->insert([
+        DB::table('settings')->insertOrIgnore([
             [
                 'key' => 'main_banner',
                 'name' => 'Баннер на главной',

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\ImageHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Category extends Model
+class Image extends Model
 {
-    use HasFactory;
+    use HasFactory, ImageHelper;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,22 +16,31 @@ class Category extends Model
     |--------------------------------------------------------------------------
     */
 
+    public $folder;
+
+    protected $guarded = [];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
 
+    public function __construct(array $attributes = [])
+    {
+        if (isset($attributes['folder'])) {
+            $this->folder = $attributes['folder'];
+            unset($attributes['folder']);
+        }
+
+        parent::__construct($attributes);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function categoryGroup(): belongsTo
-    {
-        return $this->belongsTo(CategoryGroup::class);
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -44,6 +53,11 @@ class Category extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+
+    public function setImageAttribute($value)
+    {
+        $this->setImage('image', 'public/' . $this->folder, $value);
+    }
 
     /*
     |--------------------------------------------------------------------------

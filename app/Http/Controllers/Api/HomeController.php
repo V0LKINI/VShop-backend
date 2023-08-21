@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\SettingsService;
+use App\Http\Resources\OfferCollection;
+use App\Services\SettingService;
+use App\Services\OfferService;
 
 class HomeController extends BaseController
 {
-    public function __construct(private readonly SettingsService $settingsService) {}
+    public function __construct(
+        private readonly SettingService $settingService,
+        private readonly OfferService $offerService
+    ) {}
 
     /**
      * Get data for home page
@@ -14,9 +19,11 @@ class HomeController extends BaseController
     public function index()
     {
         try {
-            $banner = $this->settingsService->getByKey(key: 'main_banner');
+            $offers = $this->offerService->getList();
+            $banner = $this->settingService->getByKey(key: 'main_banner');
 
             $response = [
+                'offers' => OfferCollection::collection($offers),
                 'settings' => [
                     'banner' => $banner
                 ],
@@ -24,7 +31,7 @@ class HomeController extends BaseController
 
             return $this->success($response);
         } catch (\Exception $e) {
-            return $this->error('Сервис временно недоступен. Мы уже работаем над его восстановлением.');
+            return $this->error($e->getMessage());
         }
     }
 }

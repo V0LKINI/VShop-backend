@@ -5,7 +5,7 @@
 - Run containers: $docker-compose up -d
 - Log into bash inside the container: $docker exec -it vshop bash
 - Install dependencies: $composer install --optimize-autoloader --no-dev
-- Configure your database, then migrate: $php artisan migrate
+- Configure your database, then migrate: $php artisan migrate --seed
 - Create App key: $php artisan key:generate
 - Create a symbolic link: $php artisan storage:link
 - Go to http://localhost:8080/api/
