@@ -79,15 +79,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('currencies', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('code')->unique();
-            $table->boolean('active');
-            $table->unsignedSmallInteger('sort')->default(500);
-            $table->timestamps();
-        });
-
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -155,6 +146,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id');
             $table->string('article')->nullable();
+            $table->unsignedInteger('price' )->nullable();
             $table->unsignedMediumInteger('stock')->default(0);
             $table->unsignedSmallInteger('sort')->default(500);
             $table->softDeletes();
@@ -189,15 +181,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('offer_prices', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('offer_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('currency_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->decimal('price', $precision = 9, $scale = 2);
-            $table->tinyInteger('discount')->default(0);
-            $table->unique(['offer_id', 'currency_id']);
-            $table->timestamps();
-        });
 
         Schema::create('offer_offer_property_value', function (Blueprint $table) {
             $table->id();
@@ -261,7 +244,6 @@ return new class extends Migration
         Schema::dropIfExists('order_statuses');
         Schema::dropIfExists('payments');
         Schema::dropIfExists('deliveries');
-        Schema::dropIfExists('currencies');
         Schema::dropIfExists('brands');
         Schema::dropIfExists('locations');
         Schema::dropIfExists('cities');

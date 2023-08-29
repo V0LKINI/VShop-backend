@@ -14,10 +14,11 @@ class OfferService
     public function getList(): null | Collection
     {
         $offers = Offer::query()
-            ->with('images')
-            ->whereHas('product', function ($q) {
-                /** @var $q Builder */
-                $q->where('active', true);
+            ->with(['images', 'product' => function ($query) {
+                $query->with('brand');
+            }])
+            ->whereHas('product', function ($query) {
+                $query->where('active', true);
             })
             ->inRandomOrder()
             ->take(50)

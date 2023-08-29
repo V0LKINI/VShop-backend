@@ -34,6 +34,16 @@ class Product extends Model
         return $this->hasMany(Offer::class);
     }
 
+    public function brand(): belongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function category(): belongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

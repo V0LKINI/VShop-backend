@@ -14,7 +14,7 @@ class HomeController extends BaseController
     ) {}
 
     /**
-     * Get data for home page
+     * Get data for the home page
      */
     public function index()
     {

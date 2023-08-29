@@ -21,6 +21,7 @@ class OfferFactory extends Factory
         return [
             'product_id' => Product::inRandomOrder()->first()->id,
             'article' =>  fake()->numberBetween(1000000000, 9999999999),
+            'price' => fake()->numberBetween(10, 100000),
             'stock' =>  fake()->numberBetween(1, 1000),
             'sort' => fake()->numberBetween(1, 1000),
         ];

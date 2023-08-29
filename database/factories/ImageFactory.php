@@ -3,8 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Image;
-use App\Models\Offer;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -27,6 +28,10 @@ class ImageFactory extends Factory
     public function withFolder($folder)
     {
         $this->folder = $folder;
+
+        if (!Storage::exists('public/' . $folder)) {
+            File::makeDirectory(storage_path('app/public/') . $folder);
+        }
 
         return $this;
     }
